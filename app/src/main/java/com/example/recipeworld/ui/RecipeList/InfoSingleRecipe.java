@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.recipeworld.AllRecipes;
+import com.example.recipeworld.MainActivity;
 import com.example.recipeworld.R;
 import com.example.recipeworld.Recipe;
 
@@ -33,7 +35,7 @@ public class InfoSingleRecipe extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UUID recipe_id = (UUID) getActivity().getIntent().getSerializableExtra("recipe_id");
-        mRecipe = AllRecipes.get(getActivity()).getRecipe(recipe_id);
+        this.mRecipe = AllRecipes.get(getActivity()).getRecipe(recipe_id);
     }
 
     @Nullable
@@ -47,9 +49,10 @@ public class InfoSingleRecipe extends Fragment {
         this.mImage.setImageResource(R.drawable.meat);
         this.mRecipeName = v.findViewById(R.id.recipeName);
         this.mRecipeIngredients = v.findViewById(R.id.recipeIngredients);
+        this.mRecipeName.setText(this.mRecipe.getRecipe());
+        this.mRecipeIngredients.setText(this.mRecipe.getIngredients());
 
-
-        return view;
-
+        return v;
     }
+
 }

@@ -17,16 +17,12 @@ public class AllRecipes {
         return sRecipeLab;
     }
     private AllRecipes(Context context) {
-        /*
         mRecipes = new ArrayList<>();
-// initialisation avec des Recipes bidons.
-        for(int i = 0; i < 100; i++) {
-            Recipe Recipe = new Recipe();
-            Recipe.setTitle("Recipe #" + i);
-            Recipe.setSolved(i%2==0); // solved every other one
-            mRecipes.add(Recipe);
-        }
-        */
+        mRecipes.add(new Recipe("lasagne","ingédients,ingédients,ingédients,ingédients"));
+        mRecipes.add(new Recipe("pâte","ingédients,ingédients,ingédients,ingédients"));
+        mRecipes.add(new Recipe("cake","ingédients,ingédients,ingédients,ingédients"));
+        mRecipes.add(new Recipe("poisson","ingédients,ingédients,ingédients,ingédients"));
+
 
     }
     public Recipe getRecipe(UUID id) {

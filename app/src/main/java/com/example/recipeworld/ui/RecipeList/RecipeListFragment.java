@@ -3,6 +3,7 @@ package com.example.recipeworld.ui.RecipeList;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.recipeworld.AllRecipes;
 import com.example.recipeworld.R;
 import com.example.recipeworld.Recipe;
 
@@ -43,16 +45,9 @@ public class RecipeListFragment extends Fragment {
         });
 /////////Recycler Things
         this.mRecyclerView = root.findViewById(R.id.recyclerview);
-        this.mAdapter = new RecipeListAdapter(getActivity());
-        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 /////////Adapter Things
-        List<Recipe> recipes = new LinkedList<>();
-        recipes.add(new Recipe("lasagne","ingédients,ingédients,ingédients,ingédients"));
-        recipes.add(new Recipe("pâte","ingédients,ingédients,ingédients,ingédients"));
-        recipes.add(new Recipe("cake","ingédients,ingédients,ingédients,ingédients"));
-        recipes.add(new Recipe("poisson","ingédients,ingédients,ingédients,ingédients"));
-        this.mAdapter.setRecipes(recipes);
+        updateUI();
         return root;
     }
 
@@ -63,8 +58,9 @@ public class RecipeListFragment extends Fragment {
         private Context context;
 
 
-        RecipeListAdapter(Context context) {
+        RecipeListAdapter(Context context, List<Recipe> recipes) {
             this.context = context;
+            this.mRecipes = recipes;
             mInflater = LayoutInflater.from(context);
         }
 
@@ -84,6 +80,7 @@ public class RecipeListFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getActivity(), RecipeActivity.class);
+                        intent.putExtra("recipe_id",current.getmId());
                         startActivity(intent);
                     }
                 });
@@ -118,4 +115,15 @@ public class RecipeListFragment extends Fragment {
             }
         }
     }
+    private void updateUI() {
+        AllRecipes allRecipes = AllRecipes.get(getActivity());
+        List<Recipe> recipes= allRecipes.getRecipes();
+        if(mAdapter == null) {
+            mAdapter = new RecipeListAdapter(getActivity(),recipes);
+            this.mRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
 }
