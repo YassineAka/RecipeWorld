@@ -12,10 +12,16 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_listRecipes"
         android:name="com.example.recipeworld.ui.RecipeList.RecipeListFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/menu_listRecipe"
         tools:layout="@layout/fragment_recipelist" />
+
+    <fragment
+        android:id="@+id/nav_addRecipe"
+        android:name="com.example.recipeworld.ui.send.AddRecipe"
+        android:label="@string/menu_addRecipe"
+        tools:layout="@layout/fragment_addrecipe" />
 
     <fragment
         android:id="@+id/nav_slideshow"
@@ -35,9 +41,5 @@
         android:label="@string/menu_share"
         tools:layout="@layout/fragment_share" />
 
-    <fragment
-        android:id="@+id/nav_send"
-        android:name="com.example.recipeworld.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
+
 </navigation>

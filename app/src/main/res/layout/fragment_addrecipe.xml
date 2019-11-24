@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+            <TextView
+            android:layout_width="387dp"
+            android:layout_height="38dp"
+            android:text="@string/recipe_name"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/addrecipename"
+            android:layout_width="387dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recipe_ingredients"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/addrecipeingredients"
+            android:layout_width="387dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/addrecipetakepicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/take_picture" />
+
+    <ImageView
+        android:id="@+id/addrecipepicture"
+        android:layout_width="389dp"
+        android:layout_height="67dp" />
+
+    <Button
+            android:id="@+id/addrecipesave"
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:text="@string/save" />
+
+</LinearLayout>

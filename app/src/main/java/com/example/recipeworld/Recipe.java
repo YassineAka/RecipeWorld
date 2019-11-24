@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public class Recipe {
     private UUID mId;
+    private String idDatabase;
     private String mRecipe;
     private String ingredients;
 
@@ -18,6 +19,13 @@ public class Recipe {
     }*/
     public Recipe(String recipe, String ingredients) {
         mId = UUID.randomUUID();
+        this.mRecipe = recipe;
+        this.ingredients= ingredients;
+
+    }
+    public Recipe(String id, String recipe, String ingredients) {
+        mId = UUID.randomUUID();
+        this.idDatabase = id;
         this.mRecipe = recipe;
         this.ingredients= ingredients;
 

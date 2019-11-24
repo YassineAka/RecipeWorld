@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1002849902386",
+    "firebase_url": "https://recipeworld-bfa09.firebaseio.com",
+    "project_id": "recipeworld-bfa09",
+    "storage_bucket": "recipeworld-bfa09.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002849902386:android:7ffd1bfaab65bca549412b",
+        "android_client_info": {
+          "package_name": "com.example.recipeworld"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002849902386-dfpgimv52jepv9mefr3r0kp0kc19os42.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.recipeworld",
+            "certificate_hash": "569711b9cab1bc3833f71db0228fdce92a40f627"
+          }
+        },
+        {
+          "client_id": "1002849902386-vv2in8ogi3qurjnahipovp0juril6rik.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJeh1uMyQjIMEJYvcsDU-dKGjybyrWqmU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1002849902386-vv2in8ogi3qurjnahipovp0juril6rik.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
