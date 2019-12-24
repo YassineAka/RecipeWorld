@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/nav_listRecipes"
-        android:name="com.example.recipeworld.ui.RecipeList.RecipeListFragment"
+        android:name="com.example.recipeworld.ui.recipeList.RecipeListFragment"
         android:label="@string/menu_listRecipe"
         tools:layout="@layout/fragment_recipelist" />
 
     <fragment
         android:id="@+id/nav_addRecipe"
-        android:name="com.example.recipeworld.ui.send.AddRecipe"
+        android:name="com.example.recipeworld.ui.AddRecipe.AddRecipe"
         android:label="@string/menu_addRecipe"
         tools:layout="@layout/fragment_addrecipe" />
 

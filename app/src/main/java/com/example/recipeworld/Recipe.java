@@ -51,4 +51,14 @@ public class Recipe {
     public String getRecipe(){
         return this.mRecipe;
     }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "mId=" + mId +
+                ", idDatabase='" + idDatabase + '\'' +
+                ", mRecipe='" + mRecipe + '\'' +
+                ", ingredients='" + ingredients + '\'' +
+                '}';
+    }
 }

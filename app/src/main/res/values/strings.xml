@@ -18,4 +18,18 @@
     <string name="recipe_ingredients">Recipe Ingredients:</string>
     <string name="recipe_name">Recipe Name:</string>
     <string name="take_picture">take picture</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in         </string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="Registering_succeed">"Registering succeed"</string>
+    <string name="error_authentication_canceled">"Registering failed : Authentification canceled"</string>
+    <string name="error_no_internet">"Registering failed : No Internet ! Please check your internet Registering "</string>
+    <string name="error_unknown_error">"Registering failed : Unknown error"</string>
 </resources>

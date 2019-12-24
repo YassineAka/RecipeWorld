@@ -1,4 +1,4 @@
-package com.example.recipeworld.ui.RecipeList;
+package com.example.recipeworld.ui.recipeList;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,10 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,15 +20,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.recipeworld.AllRecipes;
 import com.example.recipeworld.R;
 import com.example.recipeworld.Recipe;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class RecipeListFragment extends Fragment {
 
     private RecipeListViewModel mRecipeListViewModel;
     private RecyclerView mRecyclerView;
     private RecipeListAdapter mAdapter;
+    private AllRecipes allrecipes;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
@@ -116,14 +123,42 @@ public class RecipeListFragment extends Fragment {
         }
     }
     private void updateUI() {
-        AllRecipes allRecipes = AllRecipes.get(getActivity());
-        List<Recipe> recipes= allRecipes.getRecipes();
-        if(mAdapter == null) {
-            mAdapter = new RecipeListAdapter(getActivity(),recipes);
+        db.collection("recipes")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            LinkedList<Recipe> recipes = new LinkedList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Recipe recipe = new Recipe(document.getData().get("name").toString(),document.getData().get("ingredients").toString());
+                                recipes.add(recipe);
+                                if(mAdapter == null) {
+                                    mAdapter = new RecipeListAdapter(getActivity(), recipes);
+                                    mRecyclerView.setAdapter(mAdapter);
+                                }else{
+                                    mAdapter.notifyDataSetChanged();
+
+                                }
+                            }
+
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+        /*if(mAdapter == null) {
+            mAdapter = new RecipeListAdapter(getActivity(), recipes);
             this.mRecyclerView.setAdapter(mAdapter);
-        } else {
+        }else{
             mAdapter.notifyDataSetChanged();
-        }
+
+        }*/
     }
+
+    public RecyclerView getmRecyclerView() {
+        return mRecyclerView;
+    }
+
 
 }

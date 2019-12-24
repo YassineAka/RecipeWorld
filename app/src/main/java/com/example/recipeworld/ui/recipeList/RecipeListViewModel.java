@@ -1,4 +1,4 @@
-package com.example.recipeworld.ui.RecipeList;
+package com.example.recipeworld.ui.recipeList;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

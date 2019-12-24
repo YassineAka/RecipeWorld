@@ -1,0 +1,1 @@
+https://recipeworld-bfa09.firebaseapp.com/__/auth/handler
