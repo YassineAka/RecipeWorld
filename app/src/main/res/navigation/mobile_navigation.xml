@@ -12,6 +12,18 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.recipeworld.ui.auth.Profile"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/nav_profile_update"
+        android:name="com.example.recipeworld.ui.auth.ProfileUpdate"
+        android:label="@string/menu_profile_update"
+        tools:layout="@layout/fragment_profile_update" />
+
+    <fragment
         android:id="@+id/nav_listRecipes"
         android:name="com.example.recipeworld.ui.recipeList.RecipeListFragment"
         android:label="@string/menu_listRecipe"
@@ -19,7 +31,7 @@
 
     <fragment
         android:id="@+id/nav_addRecipe"
-        android:name="com.example.recipeworld.ui.AddRecipe.AddRecipe"
+        android:name="com.example.recipeworld.ui.addRecipe.AddRecipe"
         android:label="@string/menu_addRecipe"
         tools:layout="@layout/fragment_addrecipe" />
 

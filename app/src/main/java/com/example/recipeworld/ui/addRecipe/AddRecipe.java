@@ -1,12 +1,10 @@
- package com.example.recipeworld.ui.AddRecipe;
+ package com.example.recipeworld.ui.addRecipe;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,14 +29,10 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.app.Activity.RESULT_OK;
-
-public class AddRecipe extends Fragment {
+ public class AddRecipe extends Fragment {
 
     private AddRecipeViewModel addRecipeViewModel;
     private EditText mAddRecipeName;
