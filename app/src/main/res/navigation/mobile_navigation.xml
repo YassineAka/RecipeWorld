@@ -48,10 +48,9 @@
         tools:layout="@layout/fragment_tools" />
 
     <fragment
-        android:id="@+id/nav_share"
-        android:name="com.example.recipeworld.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
+        android:id="@+id/info_single_recipe"
+        android:name="com.example.recipeworld.ui.InfoSingleRecipe.InfoSingleRecipe"
+        tools:layout="@layout/fragment_onerecipe" />
 
 
 </navigation>

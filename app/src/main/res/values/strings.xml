@@ -19,6 +19,7 @@
     <string name="close">Close</string>
     <string name="save">Save</string>
     <string name="recipe_ingredients">Recipe Ingredients:</string>
+    <string name="recipe_steps">Recipe Steps:</string>
     <string name="recipe_name">Recipe Name:</string>
     <string name="take_picture">take picture</string>
     <string name="title_activity_main2">Main2Activity</string>

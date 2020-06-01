@@ -2,13 +2,13 @@ package com.example.recipeworld;
 
 public class User {
     private int mId;
-    private String mPseudo;
+    private String mName;
     private String mID;
     private String mPassword;
 
-    public User(int mId, String mPseudo, String mID, String mPassword) {
+    public User(int mId, String mName, String mID, String mPassword) {
         this.mId = mId;
-        this.mPseudo = mPseudo;
+        this.mName = mName;
         this.mID = mID;
         this.mPassword = mPassword;
     }
@@ -22,11 +22,11 @@ public class User {
     }
 
     public String getPseudo() {
-        return mPseudo;
+        return mName;
     }
 
     public void setPseudo(String mPseudo) {
-        this.mPseudo = mPseudo;
+        this.mName = mPseudo;
     }
 
     public String getID() {

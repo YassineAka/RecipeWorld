@@ -13,10 +13,6 @@
             android:icon="@drawable/ic_menu_profile"
             android:title="@string/menu_profile" />
         <item
-            android:id="@+id/nav_listRecipes"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_listRecipe" />
-        <item
             android:id="@+id/nav_addRecipe"
             android:icon="@drawable/ic_menu_send"
             android:title="@string/menu_addRecipe" />

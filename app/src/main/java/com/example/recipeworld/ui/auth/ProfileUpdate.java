@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.RequestOptions;
 import com.example.recipeworld.R;
 
 import com.bumptech.glide.Glide;
@@ -31,8 +34,11 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -42,16 +48,16 @@ public class ProfileUpdate extends Fragment {
 
     private static final String TAG = "ProfileUpdate";
 
-    CircleImageView profileImageView;
-    TextInputEditText displayNameEditText;
-    TextInputEditText displayNameEditTextEmail;
-    Button updateProfileButton;
-    ProgressBar progressBar;
-    FirebaseAuth mAuth;
+    private CircleImageView profileImageView;
+    private TextInputEditText displayNameEditText;
+    private TextInputEditText displayNameEditTextEmail;
+    private Uri uri;
+    private Button updateProfileButton;
+    private ProgressBar progressBar;
+    private FirebaseAuth mAuth;
 
-    String DISPLAY_NAME = null;
-    String DISPLAY_EMAIL = null;
-    String PROFILE_IMAGE_URL = null;
+    private String DISPLAY_NAME = null;
+    private String DISPLAY_EMAIL = null;
     int TAKE_IMAGE_CODE = 10001;
 
     @Override
@@ -62,6 +68,7 @@ public class ProfileUpdate extends Fragment {
         profileImageView = root.findViewById(R.id.profileImageView);
         displayNameEditText = root.findViewById(R.id.displayNameEditText);
         displayNameEditTextEmail = root.findViewById(R.id.displayNameEditTextEmail);
+        progressBar = root.findViewById(R.id.progressBar);
         updateProfileButton = root.findViewById(R.id.updateProfileButton);
         if (this.mAuth.getCurrentUser() != null) {
             Log.d(TAG, "onCreate: " + this.mAuth.getCurrentUser().getDisplayName());
@@ -72,22 +79,36 @@ public class ProfileUpdate extends Fragment {
                 displayNameEditTextEmail.setSelection(this.mAuth.getCurrentUser().getEmail().length());
             }
             if (this.mAuth.getCurrentUser().getPhotoUrl() != null) {
-                Glide.with(this)
-                        .load(this.mAuth.getCurrentUser().getPhotoUrl())
+                Log.i("IMAGEUPDATE","EXIIIIIIIIIIST");
+                this.uri =this.mAuth.getCurrentUser().getPhotoUrl();
+                        Glide.with(this)
+                        .load(this.uri)
+                        .apply(RequestOptions.circleCropTransform())
                         .into(profileImageView);
             }else{
+                Log.i("IMAGEUPDATE","DONT EXIIIIIIIIIIST");
+                this.uri = Uri.parse("drawable/user.png");
                 Glide.with(this)
                         .load(R.drawable.user)
                         .into(profileImageView);
             }
+
+
         }
         this.updateProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateProfile(v);
+                updateProfile(v,uri);
             }
         });
-        progressBar = root.findViewById(R.id.progressBar);
+
+        this.profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleImageClick();
+            }
+        });
+
 
         // UPDATING THE INFORMATION OF THE USER
 
@@ -100,7 +121,7 @@ public class ProfileUpdate extends Fragment {
         return root;
     }
 
-    public void updateProfile(final View view) {
+    public void updateProfile(final View view,Uri uri) {
 
         view.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
@@ -112,6 +133,7 @@ public class ProfileUpdate extends Fragment {
 
         final UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
                 .setDisplayName(DISPLAY_NAME)
+                .setPhotoUri(uri)
                 .build();
 
         user.updateEmail(DISPLAY_EMAIL)
@@ -126,7 +148,7 @@ public class ProfileUpdate extends Fragment {
                                         public void onSuccess(Void aVoid) {
                                             view.setEnabled(true);
                                             progressBar.setVisibility(View.GONE);
-                                            Toast.makeText(getActivity(), "Succesfully updated profile", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), "Succesfully updated profile", Toast.LENGTH_SHORT).show();
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -150,124 +172,35 @@ public class ProfileUpdate extends Fragment {
 
     }
 
-    public void storageDemo(View view) {
 
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//        StorageReference reference = storage.getReference();
-//        StorageReference horseRef = reference.child("horse__.jpg");
-//        StorageReference horseRef = storage.getReference().child("images").child("girl.jpg");
-//        StorageReference horseRef = storage.getReference().child("images").child("profileImages").child("123.jpg");
-//        Bitmap horseBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.horse);
-//        ByteArrayOutputStream boas = new ByteArrayOutputStream();
-//        horseBitmap.compress(Bitmap.CompressFormat.JPEG, 20, boas);
-//        horseRef.putBytes(boas.toByteArray())
-//                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        Toast.makeText(ProfileActivity.this, "upload succesfull", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
 
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//        StorageReference imageRef = storage.getReference()
-//                .child("images")
-//                .child("profileImages")
-//                .child("123.jpg");
 
-//        imageRef.getBytes(1024*1024)
-//                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//                    @Override
-//                    public void onSuccess(byte[] bytes) {
-//                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                        profileImageView.setImageBitmap(bitmap);
-//                    }
-//                });
-//        imageRef.getDownloadUrl()
-//                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        Log.d(TAG, "Download url is: " + uri.toString());
-//                    }
-//                });
-    }
+    public void handleImageClick() {
 
-    public void handleImageClick(View view) {
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(intent, TAKE_IMAGE_CODE);
-        }
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(intent,TAKE_IMAGE_CODE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == TAKE_IMAGE_CODE) {
-            switch (resultCode) {
-                case RESULT_OK:
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    profileImageView.setImageBitmap(bitmap);
-                    handleUpload(bitmap);
+        if(resultCode == RESULT_OK) {
+            Log.i("Pick-picture", "Ok je suis rentré");
+            if (requestCode == TAKE_IMAGE_CODE) {
+                this.uri = data.getData();
+                Picasso.get().load(uri).fit().centerCrop().into(this.profileImageView);
             }
         }
     }
 
-    private void handleUpload(Bitmap bitmap) {
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final StorageReference reference = FirebaseStorage.getInstance().getReference()
-                .child("profileImages")
-                .child(uid + ".jpeg");
 
-        reference.putBytes(baos.toByteArray())
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        getDownloadUrl(reference);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onFailure: ",e.getCause() );
-                    }
-                });
-    }
-
-    private void getDownloadUrl(StorageReference reference) {
-        reference.getDownloadUrl()
-                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Log.d(TAG, "onSuccess: " + uri);
-                        setUserProfileUrl(uri);
-                    }
-                });
-    }
-
-    private void setUserProfileUrl(Uri uri) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
-                .setPhotoUri(uri)
-                .build();
-
-        user.updateProfile(request)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getActivity(), "Updated succesfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Profile image failed...", Toast.LENGTH_SHORT).show();
-                    }
-                });
+    public Uri getUriFromBitmap(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 
 

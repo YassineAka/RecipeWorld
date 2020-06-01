@@ -58,70 +58,70 @@ public class RecipeListFragment extends Fragment {
         return root;
     }
 
-    public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder> {
+        public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder> {
 
-        private final LayoutInflater mInflater;
-        private List<Recipe> mRecipes;// Cached copy of Recipes
-        private Context context;
+            private final LayoutInflater mInflater;
+            private List<Recipe> mRecipes;// Cached copy of Recipes
+            private Context context;
 
 
-        RecipeListAdapter(Context context, List<Recipe> recipes) {
-            this.context = context;
-            this.mRecipes = recipes;
-            mInflater = LayoutInflater.from(context);
-        }
+            RecipeListAdapter(Context context, List<Recipe> recipes) {
+                this.context = context;
+                this.mRecipes = recipes;
+                mInflater = LayoutInflater.from(context);
+            }
 
-        @Override
-        public RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
-            return new RecipeViewHolder(itemView);
-        }
+            @Override
+            public RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
+                return new RecipeViewHolder(itemView);
+            }
 
-        @Override
-        public void onBindViewHolder(RecipeViewHolder holder, int position) {
-            if (mRecipes != null) {
-                final Recipe current = mRecipes.get(position);
-                holder.recipe.setText(current.getRecipe());
-                holder.ingredients.setText(current.getIngredients());
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getActivity(), RecipeActivity.class);
-                        intent.putExtra("recipe_id",current.getmId());
-                        startActivity(intent);
-                    }
-                });
-            } else {
-                // Covers the case of data not being ready yet.
-                holder.recipe.setText("No Recipe");
+            @Override
+            public void onBindViewHolder(RecipeViewHolder holder, int position) {
+                if (mRecipes != null) {
+                    final Recipe current = mRecipes.get(position);
+                    holder.recipe.setText(current.getRecipe());
+                    //holder.ingredients.setText(current.getIngredients());
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getActivity(), RecipeActivity.class);
+                            intent.putExtra("recipe_id",current.getmId());
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    // Covers the case of data not being ready yet.
+                    holder.recipe.setText("No Recipe");
+                }
+            }
+
+            void setRecipes(List<Recipe> recipes){
+                mRecipes = recipes;
+                notifyDataSetChanged();
+            }
+
+            // getItemCount() is called many times, and when it is first called,
+            // mRecipes has not been updated (means initially, it's null, and we can't return null).
+            @Override
+            public int getItemCount() {
+                if (mRecipes != null)
+                    return mRecipes.size();
+                else return 0;
+            }
+
+            class RecipeViewHolder extends RecyclerView.ViewHolder {
+                private final TextView recipe;
+                //private final TextView ingredients;
+
+                private  RecipeViewHolder(final View itemView) {
+                    super(itemView);
+                    recipe = itemView.findViewById(R.id.textView);
+                    //ingredients = itemView.findViewById(R.id.ingredients);
+                }
             }
         }
-
-        void setRecipes(List<Recipe> recipes){
-            mRecipes = recipes;
-            notifyDataSetChanged();
-        }
-
-        // getItemCount() is called many times, and when it is first called,
-        // mRecipes has not been updated (means initially, it's null, and we can't return null).
-        @Override
-        public int getItemCount() {
-            if (mRecipes != null)
-                return mRecipes.size();
-            else return 0;
-        }
-
-        class RecipeViewHolder extends RecyclerView.ViewHolder {
-            private final TextView recipe;
-            private final TextView ingredients;
-
-            private  RecipeViewHolder(final View itemView) {
-                super(itemView);
-                recipe = itemView.findViewById(R.id.textView);
-                ingredients = itemView.findViewById(R.id.ingredients);
-            }
-        }
-    }
     private void updateUI() {
         db.collection("recipes")
                 .get()
