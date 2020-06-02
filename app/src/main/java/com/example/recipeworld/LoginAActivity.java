@@ -37,8 +37,6 @@ import java.util.Map;
 public class LoginAActivity extends AppCompatActivity {
     //instance
     private FirebaseAuth mAuth;
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageReference = storage.getReference();
 
     //email,password login
     private EditText mEmailTextView, mPasswordTextView;
@@ -66,17 +64,13 @@ public class LoginAActivity extends AppCompatActivity {
 
         setContentView(R.layout.login_activity);
 
-        /*FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);*/
-        // taking instance of FirebaseAuth
-
         // initialising all views through id defined above
         mEmailTextView = findViewById(R.id.email);
         mPasswordTextView = findViewById(R.id.password);
         mLoginButton = (Button) findViewById(R.id.login);
 
         // Set on Click Listener on Sign-in button
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
+        /*mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
@@ -105,7 +99,7 @@ public class LoginAActivity extends AppCompatActivity {
             public void onError(FacebookException error) {
                 Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
         //
         this.mRegisterButton = findViewById(R.id.registerRedirect);
@@ -181,7 +175,7 @@ public class LoginAActivity extends AppCompatActivity {
 
 
     //Login in Facebook
-    private void handleFacebookAccessToken(AccessToken accessToken) {
+    /*private void handleFacebookAccessToken(AccessToken accessToken) {
         Log.i("FACEBOOK","Handle OK");
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -196,31 +190,16 @@ public class LoginAActivity extends AppCompatActivity {
                     Map<String, Object> user = new HashMap<>();
                     user.put("uid", mAuth.getCurrentUser().getUid());
                     user.put("name",mAuth.getCurrentUser().getDisplayName());
-                    db.collection(mAuth.getCurrentUser().getUid())
+                    db.collection("users")
                             .add(user);
 
-                    StorageReference ref = storageReference.child("usersphotos/"+mAuth.getCurrentUser().getUid());
-                    ref.putFile(mAuth.getCurrentUser().getPhotoUrl())
-                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                    Log.i( "Image", "Okayy");
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.i( "Image", "Not okayy");
-
-                                }
-                            });
                     Intent intent = new Intent(LoginAActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
             }
         });
-    }
+    }*/
     //if there is a user logged
     protected Boolean isCurrentUserIsLogged() {
         return (this.mAuth.getCurrentUser() != null);

@@ -162,7 +162,8 @@ public class ProfileUpdate extends Fragment {
                             StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
                             StorageReference ref = mStorageRef.child("usersphotos/"+mAuth.getCurrentUser().getUid());
                             ref.delete();
-                            ref.putFile(uri);
+                            Uri uri2 = uri;
+                            ref.putFile(uri2);
                         }else{
                             view.setEnabled(true);
                             progressBar.setVisibility(View.GONE);

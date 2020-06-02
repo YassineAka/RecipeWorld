@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.recipeworld.R;
+import com.example.recipeworld.ui.auth.Profile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -109,6 +110,7 @@ public class Home extends Fragment {
         @Override
         public void onBindViewHolder(final Home.HomeAdapter.HomeHolder holder, int position) {
             holder.name.setText(mUsersNames.get(position));
+            holder.uid = mUsersUid.get(position);
             Log.i("TESTUSERS","nom mis à jour");
 
 
@@ -116,7 +118,6 @@ public class Home extends Fragment {
 
             //Get images from FirebaseStorage
             mStorageRef = FirebaseStorage.getInstance().getReference();
-            String name = mStorageRef.child(mAuth.getCurrentUser().getUid()).getName();
             ref = mStorageRef.child("usersphotos/"+mUsersUid.get(position));
 
             ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -124,7 +125,7 @@ public class Home extends Fragment {
                 public void onSuccess(Uri uri) {
                     Log.e("TESTUSERS", "user image good");
 
-                    Picasso.get().load(uri).rotate(90).resize(150,105).into(holder.image);
+                    Picasso.get().load(uri).resize(150,105).into(holder.image);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -136,6 +137,12 @@ public class Home extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("uid",holder.uid);
+                    bundle.putString("name",holder.name.getText().toString());
+                    Profile newFragment = new Profile();
+                    newFragment.setArguments(bundle);
+                    getParentFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,newFragment).commit();
                 }
             });
         }
@@ -148,6 +155,7 @@ public class Home extends Fragment {
         class HomeHolder extends RecyclerView.ViewHolder {
             TextView name;
             ImageView image;
+            String uid;
 
             public HomeHolder(View itemView) {
                 super(itemView);

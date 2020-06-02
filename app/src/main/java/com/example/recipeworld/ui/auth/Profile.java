@@ -44,7 +44,6 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class Profile extends Fragment {
     private ImageView imageViewProfile;
     private TextView textInputEditTextUsername;
-    private String uid;
     //private TextView textViewEmail;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -56,12 +55,18 @@ public class Profile extends Fragment {
     private LinkedList<String> mRecipesNames;
     private LinkedList<String> mRecipesIngredients;
     private LinkedList<String> mRecipesSteps;
+    private String mUid;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
 
         this.mAuth = FirebaseAuth.getInstance();
+        if(this.getArguments() != null){
+            mUid = ((Bundle) this.getArguments()).getString("uid");
+        }else{
+            mUid = getCurrentUid();
+        }
         this.imageViewProfile = root.findViewById(R.id.profile_activity_imageview_profile);
         this.textInputEditTextUsername = root.findViewById(R.id.profile_activity_edit_text_username);
         //this.textViewEmail = root.findViewById(R.id.profile_activity_text_view_email);
@@ -85,30 +90,54 @@ public class Profile extends Fragment {
 
     private void updateUIWhenCreating(){
 
-        if (this.mAuth.getCurrentUser() != null){
+        if(isCurrentUser()){
+            if (this.mAuth.getCurrentUser() != null){
 
-            //Get picture URL from Firebase
-            if (this.mAuth.getCurrentUser().getPhotoUrl() != null) {
-                Log.i("IMAGE","EXIIIIIIIIIIST");
-                Glide.with(this)
-                        .load(this.mAuth.getCurrentUser().getPhotoUrl())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(imageViewProfile);
-            }else{
-                Log.i("IMAGE","DONT EXIIIIIIIIIIST");
-                Glide.with(this)
-                        .load(R.drawable.user)
-                        .into(imageViewProfile);
+                //Get picture URL from Firebase
+                if (this.mAuth.getCurrentUser().getPhotoUrl() != null) {
+                    Log.i("IMAGE","EXIIIIIIIIIIST");
+                    Uri uri = this.mAuth.getCurrentUser().getPhotoUrl();
+                    Glide.with(this)
+                            .load(uri)
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(imageViewProfile);
+                }else{
+                    Log.i("IMAGE","DONT EXIIIIIIIIIIST");
+                    Glide.with(this)
+                            .load(R.drawable.user)
+                            .into(imageViewProfile);
+                }
+
+                //Get email & username from Firebase
+                String username = TextUtils.isEmpty(this.mAuth.getCurrentUser().getDisplayName()) ? getString(R.string.info_no_username_found) : this.mAuth.getCurrentUser().getDisplayName();
+
+                //Update views with data
+                this.textInputEditTextUsername.setText(username);
+                //this.textViewEmail.setText(email);
             }
+        }else{
+            mStorageRef = FirebaseStorage.getInstance().getReference();
+            ref = mStorageRef.child("usersphotos/"+mUid);
+            Log.i("PROFILE",mUid);
 
-            //Get email & username from Firebase
-            String email = TextUtils.isEmpty(this.mAuth.getCurrentUser().getEmail()) ? getString(R.string.info_no_email_found) : this.mAuth.getCurrentUser().getEmail();
-            String username = TextUtils.isEmpty(this.mAuth.getCurrentUser().getDisplayName()) ? getString(R.string.info_no_username_found) : this.mAuth.getCurrentUser().getDisplayName();
+            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Log.e("TESTUSERS", "user image good");
 
-            //Update views with data
-            this.textInputEditTextUsername.setText(username);
-            //this.textViewEmail.setText(email);
+                    Picasso.get().load(uri).rotate(-90).resize(150,105).into(imageViewProfile);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("TESTUSERS", e.getMessage());
+
+                }
+            });
+            this.textInputEditTextUsername.setText(this.getArguments().getString("name"));
+
         }
+
     }
 
     public class ProfileAdapter extends RecyclerView.Adapter<Profile.ProfileAdapter.ProfileViewHolder> {
@@ -142,8 +171,7 @@ public class Profile extends Fragment {
 
             //Get images from FirebaseStorage
             mStorageRef = FirebaseStorage.getInstance().getReference();
-            String name = mStorageRef.child(mAuth.getCurrentUser().getUid()).getName();
-            ref = mStorageRef.child(name+"/"+mRecipesNames.get(position));
+            ref = mStorageRef.child(mUid+"/"+mRecipesNames.get(position));
 
             ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
@@ -197,7 +225,7 @@ public class Profile extends Fragment {
         }
     }
     private void updateUI() {
-        getRecipes()
+        getRecipes(mUid)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -227,8 +255,8 @@ public class Profile extends Fragment {
         return mRecyclerView;
     }
 
-    public CollectionReference getRecipes(){
-        return db.collection(getCurrentUid());
+    public CollectionReference getRecipes(String uid){
+        return db.collection(uid);
 
     }
     public String getCurrentUid(){
@@ -238,7 +266,7 @@ public class Profile extends Fragment {
 
 
     public void updateLists(){
-        getRecipes()
+        getRecipes(mUid)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -253,5 +281,12 @@ public class Profile extends Fragment {
                         }
                     }
                 });
+    }
+    public boolean isCurrentUser(){
+        return this.getArguments() == null;
+    }
+
+    public String getUid() {
+        return mUid;
     }
 }

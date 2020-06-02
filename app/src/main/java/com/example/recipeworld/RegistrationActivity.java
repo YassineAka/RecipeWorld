@@ -180,6 +180,7 @@ public class RegistrationActivity extends AppCompatActivity {
             Log.i("Pick-picture", "Ok je suis rentré");
             if (requestCode == TAKE_IMAGE_CODE) {
                 this.mUri = data.getData();
+                Uri uri = this.mUri;
                 Picasso.get().load(mUri).fit().centerCrop().into(this.mImageRegister);
             }
         }

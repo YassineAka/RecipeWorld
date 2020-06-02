@@ -11,7 +11,7 @@
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:padding="15dp"
-    tools:context=".LoginActivity">
+    tools:context=".LoginAActivity">
 
     <!-- TextView for heading -->
 
@@ -65,13 +65,13 @@
             android:layout_height="wrap_content"
             android:text="Login" />
 
-        <com.facebook.login.widget.LoginButton
+        <!--<com.facebook.login.widget.LoginButton
             android:id="@+id/login_fcbk"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#3B5998"
             android:text="Sign up with Facebook"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff" />-->
 
         <Space
             android:layout_width="match_parent"
