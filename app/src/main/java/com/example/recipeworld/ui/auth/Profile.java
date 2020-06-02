@@ -44,6 +44,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class Profile extends Fragment {
     private ImageView imageViewProfile;
     private TextView textInputEditTextUsername;
+    private String uid;
     //private TextView textViewEmail;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();

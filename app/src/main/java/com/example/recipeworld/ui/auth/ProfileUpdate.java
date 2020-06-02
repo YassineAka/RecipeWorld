@@ -121,7 +121,7 @@ public class ProfileUpdate extends Fragment {
         return root;
     }
 
-    public void updateProfile(final View view,Uri uri) {
+    public void updateProfile(final View view, final Uri uri) {
 
         view.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
@@ -159,6 +159,10 @@ public class ProfileUpdate extends Fragment {
                                             Log.e(TAG, "onFailure: ", e.getCause());
                                         }
                                     });
+                            StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
+                            StorageReference ref = mStorageRef.child("usersphotos/"+mAuth.getCurrentUser().getUid());
+                            ref.delete();
+                            ref.putFile(uri);
                         }else{
                             view.setEnabled(true);
                             progressBar.setVisibility(View.GONE);

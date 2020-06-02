@@ -17,18 +17,28 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginAActivity extends AppCompatActivity {
     //instance
     private FirebaseAuth mAuth;
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageReference = storage.getReference();
 
     //email,password login
     private EditText mEmailTextView, mPasswordTextView;
@@ -38,6 +48,8 @@ public class LoginAActivity extends AppCompatActivity {
     private LoginButton mLoginButtonFcbk;
     private FirebaseAuth.AuthStateListener mFirebaseAuthListner;
     private CallbackManager mCallbackManager;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     //register
     private Button mRegisterButton;
@@ -181,6 +193,28 @@ public class LoginAActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Error in signing with Facebook", Toast.LENGTH_LONG).show();
                 }else{
                     Log.i("FACEBOOK","Intent launched");
+                    Map<String, Object> user = new HashMap<>();
+                    user.put("uid", mAuth.getCurrentUser().getUid());
+                    user.put("name",mAuth.getCurrentUser().getDisplayName());
+                    db.collection(mAuth.getCurrentUser().getUid())
+                            .add(user);
+
+                    StorageReference ref = storageReference.child("usersphotos/"+mAuth.getCurrentUser().getUid());
+                    ref.putFile(mAuth.getCurrentUser().getPhotoUrl())
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                    Log.i( "Image", "Okayy");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.i( "Image", "Not okayy");
+
+                                }
+                            });
                     Intent intent = new Intent(LoginAActivity.this, MainActivity.class);
                     startActivity(intent);
                 }

@@ -4,7 +4,9 @@
 <LinearLayout xmlns:android=
     "http://schemas.android.com/apk/res/android"
     xmlns:app="http:// schemas.android.com/apk/res-auto"
+    xmlns:app2="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http:// schemas.android.com/tools"
+    xmlns:tools2="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
@@ -41,6 +43,18 @@
         android:inputType="textPassword" />
 
     <!-- Button for register with text "Register" -->
+    <Button
+        android:id="@+id/register_image_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="import" />
+
+    <ImageView
+        android:id="@+id/register_image"
+        android:layout_width="match_parent"
+        android:layout_height="104dp"
+        tools2:srcCompat="@tools:sample/avatars" />
+
     <Button
         android:id="@+id/btnregister"
         android:layout_width="match_parent"
